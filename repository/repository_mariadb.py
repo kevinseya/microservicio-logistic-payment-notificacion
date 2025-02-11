@@ -1,10 +1,9 @@
-import mysql.connector
-from config.mysql import get_mysql_connection
+import mariadb
+from config.mariadb import get_mariadb_connection
 import logging
 from uuid import UUID
 
 logging.basicConfig(level=logging.INFO)
-# Función para actualizar el estado de la orden en MySQL
 
 def get_order_by_id(order_id):
     """
@@ -12,7 +11,7 @@ def get_order_by_id(order_id):
     """
     connection = None
     try:
-        connection = get_mysql_connection()
+        connection = get_mariadb_connection()
         with connection.cursor() as cursor:
             select_query = """
                 SELECT orderId, idCustomer, senderName, receiverName, receiverPhone, 
@@ -42,10 +41,9 @@ def get_order_by_id(order_id):
                 logging.warning(f"No se encontró ninguna orden para el order_id {order_id}")
                 return None
 
-    except mysql.connector.Error as e:
+    except mariadb.Error as e:
         logging.error(f"Error al obtener la orden: {e}")
         return None
     finally:
         if connection:
             connection.close()
-

@@ -1,7 +1,7 @@
 import psycopg2
 import logging
 from model.models import Payment
-from config.postgresql import get_postgres_connection
+from config.postgresql import get_postgres_connection_customer, get_postgres_connection_payments
 
 # Función para obtener payment
 def get_pay_by_payment_intent(payment_intent):
@@ -10,7 +10,7 @@ def get_pay_by_payment_intent(payment_intent):
     """
     connection = None
     try:
-        connection = get_postgres_connection()
+        connection = get_postgres_connection_payments()
         with connection.cursor() as cursor:  
             select_query = """
                 SELECT * FROM payments
@@ -49,7 +49,7 @@ def get_customer_by_id(customer_id):
     """
     connection = None
     try:
-        connection = get_postgres_connection()
+        connection = get_postgres_connection_customer()
         with connection.cursor() as cursor:
             # Query para obtener toda la información del cliente basado en el customer_id
             select_query = """
@@ -90,7 +90,7 @@ def update_payment_status_ok(payment_intent):
     """
     connection = None
     try:
-        connection = get_postgres_connection()
+        connection = get_postgres_connection_payments()
         cursor = connection.cursor()
 
         # Ejecutar la actualización de estado en la base de datos

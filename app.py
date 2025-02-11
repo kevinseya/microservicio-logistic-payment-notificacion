@@ -2,13 +2,14 @@ import os
 from flask import Flask, request, jsonify
 from model.models import Notificacion
 from repository.repository_mongo import save_notification
-from repository.repository_mysql import get_order_by_id
+from repository.repository_mariadb import get_order_by_id
 from repository.repostory_postgres import update_payment_status_ok, get_customer_by_id, get_pay_by_payment_intent
 from service.email_service import send_email
 from uuid import UUID
 from model.models import Payment
 from datetime import datetime
 from dotenv import load_dotenv
+import requests
 from pymongo.errors import ConnectionFailure, WriteError
 
 
@@ -16,6 +17,7 @@ load_dotenv()
 
 app = Flask(__name__)
 port = int(os.getenv("PORT", 5000))
+url_update_order_status = os.getenv("URL_UPDATE_ORDER_STATUS", "http://localhost:7002/api/order/update")
 
 @app.route("/")
 def home():
@@ -46,6 +48,7 @@ def webhook():
             if field not in data:
                 return jsonify({"error": f"Required field missing: {field}"}), 400
 
+        #Update status payment
         data["payment_intent"] = str(data["payment_intent"]) 
         update_payment_status_ok(data["payment_intent"])
        
@@ -58,10 +61,17 @@ def webhook():
             if not order:
                 return jsonify({"error": "Order not found"}), 404
 
+            #Update statut Order
+            update_url = f"{url_update_order_status}/{order['order_id']}"
+            payload = {"status": "Paid"}
+            response = requests.put(update_url, json=payload)
+            if not response:
+                return jsonify({"error": "Error updating order"}), 404              
+        
             notification_data = {
                 "payment_intent": str(data["payment_intent"]),
-                "order_id": str(order['order_id']),  # Convertir UUID a cadena
-                "payment_id": str(payment.id),  # Convertir UUID a cadena
+                "order_id": str(order['order_id']),  
+                "payment_id": str(payment.id),  
                 "packageDetails": str(order['package_details']),
                 "price": str(order["price"]),
                 "message": "Update Status to 'PROCESSED' in order",
