@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 # Usa una imagen base más ligera y adecuada
->>>>>>> ec1ed5a23e64cdc3ccdb3ce7fb2bf7c44b1eea1b
 FROM python:3.9.12-slim
 
 # Actualizar los repositorios e instalar las dependencias necesarias para MariaDB
