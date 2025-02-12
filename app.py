@@ -18,7 +18,7 @@ load_dotenv()
 app = Flask(__name__)
 port = int(os.getenv("PORT", 5000))
 url_update_order_status = os.getenv("URL_UPDATE_ORDER_STATUS", "http://localhost:7002/api/order/update")
-
+url_shipment_asingment = os.getenv("URL_SHIPMENT_ASIGNMENT")
 @app.route("/")
 def home():
     return f"Webhook is running on port {port} 🚀"
@@ -64,10 +64,16 @@ def webhook():
             #Update statut Order
             update_url = f"{url_update_order_status}/{order['order_id']}"
             payload = {"status": "Paid"}
+            
             response = requests.put(update_url, json=payload)
             if not response:
                 return jsonify({"error": "Error updating order"}), 404              
         
+            shipment_url = f"{url_shipment_asingment}"
+            payload = {"orderId": str(order['order_id']) }
+            
+            response = requests.post(shipment_url, json=payload )
+
             notification_data = {
                 "payment_intent": str(data["payment_intent"]),
                 "order_id": str(order['order_id']),  
