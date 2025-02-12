@@ -1,8 +1,8 @@
 # Usa una imagen base más ligera y adecuada
 FROM python:3.9.12-slim
 
-# Actualizar los repositorios e instalar las dependencias necesarias para MariaDB
-RUN apt-get update && apt-get install -y libmariadb-dev gcc
+# Actualizar pip
+RUN python -m pip install --upgrade pip
 
 # Definir el directorio de trabajo
 WORKDIR /app
