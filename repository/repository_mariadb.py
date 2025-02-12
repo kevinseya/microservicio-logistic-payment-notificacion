@@ -1,4 +1,4 @@
-import mariadb
+import mysql.connector
 from config.mariadb import get_mariadb_connection
 import logging
 from uuid import UUID
@@ -41,7 +41,7 @@ def get_order_by_id(order_id):
                 logging.warning(f"No se encontró ninguna orden para el order_id {order_id}")
                 return None
 
-    except mariadb.Error as e:
+    except mysql.connector.Error as e:
         logging.error(f"Error al obtener la orden: {e}")
         return None
     finally:

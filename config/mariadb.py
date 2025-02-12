@@ -1,9 +1,9 @@
-import mariadb
+import mysql.connector
 import os
 
 def get_mariadb_connection():
     try:
-        connection = mariadb.connect(
+        connection = mysql.connector.connect(
             host=os.getenv("MYSQL_HOST"),
             port=(os.getenv("MYSQL_PORT")),
             user=os.getenv("MYSQL_USER"),
@@ -12,6 +12,6 @@ def get_mariadb_connection():
         )
         print("Conexión exitosa a MariaDB")
         return connection
-    except mariadb.Error as e:
+    except mysql.connector.Error as e:
         print(f"Error de conexión a MariaDB: {e}")
         raise
