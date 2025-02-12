@@ -1,155 +1,154 @@
 # microservicio-logistic-payment-notificacion
 # Python Project: Logistics Payment Notification
 
-## microservicio-logistic-payment-notificacion
+## microservice-logistic-payment-notification
 
-Este es un microservicio desarrollado en **Python** que proporciona una API para gestionar notificaciones de pago en un sistema logístico. Su funcionalidad principal es recibir confirmaciones de pago, actualizar estados de ordenes y enviar notificaciones por correo electrónico a los clientes.
+This is a microservice developed in **Python** that provides an API to manage payment notifications in a logistics system. Its main functionality is to receive payment confirmations, update order statuses, and send email notifications to customers.
 
-## Prerrequisitos
+## Prerequisites
 
-Asegúrate de tener instalado lo siguiente en tu sistema:
+Make sure you have the following installed on your system:
 
-- **Python** (v3.8 o superior)
+- **Python** (v3.8 or higher)
 - **Docker**
-- **MongoDB** (para almacenar notificaciones)
-- **MariaDB / PostgreSQL** (si se requiere almacenamiento relacional)
-- Configuración de un servidor SMTP para el envío de correos
+- **MongoDB** (for storing notifications)
+- **MariaDB / PostgreSQL** (if relational storage is required)
+- Setting up an SMTP server for sending emails
 
-## Configuración
+## Setup
 
-### 1. Clonar el repositorio
+### 1. Clone the repository
 
-Si el proyecto está alojado en un repositorio de Git, clónalo en tu máquina local:
+If the project is hosted on a Git repository, clone it to your local machine:
 
 ```sh
-git clone https://github.com/kevinseya/microservicio-logistic-payment-notificacion.git
+git clone https://github.com/kevinseya/microservicio-logistic-payment-notificación.git
 ```
 
-### 2. Configurar variables de entorno
+### 2. Set up environment variables
 
-Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
+Create a `.env` file in the root of the project with the following variables:
 
 ```sh
 MONGO_URL=mongodb://localhost:27017
-MONGO_DB_NAME=notificaciones_db
-MONGO_COLLECTION=notificaciones
+MONGO_DB_NAME=db_notifications
+MONGO_COLLECTION=notifications
 MAIL_SERVER=smtp.gmail.com
 MAIL_PORT=587
-MAIL_USERNAME=tu_email@gmail.com
-MAIL_PASSWORD=tu_password
+MAIL_USERNAME=your_email@gmail.com
+MAIL_PASSWORD=your_password
 MAIL_USE_TLS=True
 MAIL_USE_SSL=False
 PORT=5003
 ```
 
-### 3. Instalar dependencias
+### 3. Install dependencies
 
-Ejecuta el siguiente comando para instalar las dependencias necesarias:
+Run the following command to install the necessary dependencies:
 
 ```sh
 pip install -r requirements.txt
 ```
 
-### 4. Ejecutar el proyecto
+### 4. Run the project
 
-Para correr el servidor localmente, usa el siguiente comando:
+To run the server locally, use the following command:
 
 ```sh
 python app.py
 ```
 
-El servidor iniciará en el puerto **5003**. Puedes probarlo con:
+The server will start on port **5003**. You can test it with:
 
 ```
 http://localhost:5003
 ```
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
-.microservicio-logistic-payment-notificacion/
-├── .github/workflows/dockerhub_ec2.yml  # Configuración CI/CD
+.microservice-logistic-payment-notification/
+├── .github/workflows/dockerhub_ec2.yml # CI/CD Configuration
 ├── config/
-│   ├── config.py  # Configuración de variables de entorno
-│   ├── mariadb.py  # Conexión a MariaDB
-│   ├── mongo.py  # Conexión a MongoDB
-│   ├── postgresql.py  # Conexión a PostgreSQL
+│ ├── config.py # Environment Variables Configuration
+│ ├── mariadb.py # Connection to MariaDB
+│ ├── mongo.py # Connection to MongoDB
+│ ├── postgresql.py # Connection to PostgreSQL
 ├── model/
-│   ├── models.py  # Modelos de datos
+│ ├── models.py # Data Models
 ├── repository/
-│   ├── repository_mariadb.py  # Lógica para consultas en MariaDB
-│   ├── repository_mongo.py  # Lógica para consultas en MongoDB
-│   ├── repository_postgres.py  # Lógica para consultas en PostgreSQL
+│ ├── repository_mariadb.py # Logic for MariaDB queries
+│ ├── repository_mongo.py # Logic for MongoDB queries
+│ ├── repository_postgres.py # Logic for PostgreSQL queries
 ├── service/
-│   ├── email_service.py  # Servicio para envío de correos
+│ ├── email_service.py # Service for sending emails
 ├── .gitignore
-├── Dockerfile  # Configuración de Docker
-├── requirements.txt  # Dependencias del proyecto
-├── app.py  # Punto de entrada de la aplicación
+├── Dockerfile # Docker configuration
+├── requirements.txt # Project dependencies
+├── app.py # Application entry point
 └── README.md
 ```
 
-## CI/CD con Docker y EC2
+## CI/CD with Docker and EC2
 
-Este microservicio está configurado para ser desplegado en **AWS EC2** mediante GitHub Actions.
+This microservice is configured to be deployed on **AWS EC2** via GitHub Actions.
 
-### 1. Construcción y subida de imagen a Docker Hub
+### 1. Building and Pushing Image to Docker Hub
 
-El archivo `.github/workflows/dockerhub_ec2.yml` contiene los pasos para:
-- Autenticar en Docker Hub
-- Construir la imagen con `docker build`
-- Subirla a Docker Hub con `docker push`
+The `.github/workflows/dockerhub_ec2.yml` file contains the steps to:
+- Authenticate to Docker Hub
+- Build the image with `docker build`
+- Push it to Docker Hub with `docker push`
 
-### 2. Despliegue en EC2
+### 2. Deploy to EC2
 
-- La instancia de EC2 obtiene la imagen de Docker Hub
-- Se detiene y elimina cualquier contenedor previo
-- Se genera un archivo `.env` con las credenciales necesarias
-- Se levanta el contenedor con `docker run`
+- The EC2 instance fetches the image from Docker Hub
+- Any previous containers are stopped and removed
+- A `.env` file is generated with the necessary credentials
+- The container is started with `docker run`
 
 ## Docker
 
-Para construir y correr el microservicio en Docker manualmente:
+To build and run the microservice in Docker manually:
 
-### 1. Construir la imagen
+### 1. Build the image
 ```sh
 docker build -t payment_notification .
 ```
 
-### 2. Ejecutar el contenedor
+### 2. Run the container
 ```sh
 docker run -d --name payment_notification -p 5003:5003 --env-file .env payment_notification
 ```
 
-## API Endpoints
+## Endpoints API
 
-### Webhook de Notificación de Pago
-- **Ruta:** `POST /webhook_update_payment`
-- **Cuerpo:**
+### Payment Notification Webhook
+- **Path:** `POST /webhook_update_payment`
+- **Body:**
 
 ```json
 {
-  "payment_intent": "pi_1234567890"
+ "payment_intent": "pi_1234567890"
 }
 ```
 
-- **Respuesta:**
+- **Answer:**
 ```json
 {
-  "message": "Notification received and mail sent",
-  "data": {"payment_id": "pi_1234567890", "order_id": "ord_789456", ...},
-  "email_status": "sent"
+ "message": "Notification received and mail sent",
+ "data": {"payment_id": "pi_1234567890", "order_id": "ord_789456", ...},
+ "email_status": "sent"
 }
 ```
 
-## Tecnologías Usadas
+## Technologies Used
 
-- **Python** como lenguaje principal
-- **MongoDB** para almacenar notificaciones
-- **MariaDB / PostgreSQL** para almacenamiento de pagos y pedidos
-- **Flask-Mail** para envío de correos
-- **Docker** para contenedorización
-- **GitHub Actions** para CI/CD
-- **AWS EC2** para despliegue en la nube
-
+- **Python** as main language
+- **MongoDB** for storing notifications
+- **MariaDB / PostgreSQL** for storing payments and orders
+- **Flask-Mail** for sending emails
+- **Docker** for containerization
+- **GitHub Actions** for CI/CD
+- **AWS EC2** for cloud deployment
 
