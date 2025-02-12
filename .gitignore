@@ -1,24 +1,24 @@
-# Ignorar entornos virtuales
+# Ignore virtual environments
 venv/
 env/
 .env
 
-# Ignorar archivos compilados de Python
+# Ignore compiled Python files
 *.pyc
 *.pyo
 __pycache__/
 
-# Ignorar archivos de configuración de IDEs
+# Ignore IDE configuration files
 .vscode/
 .idea/
 
-# Ignorar archivos de log
+# Ignore log files
 *.log
 
-# Ignorar archivos de bases de datos locales
+# Ignore local database files
 *.db
 
-# Ignorar archivos temporales
+# Ignore temporary files
 *.bak
 *.swp
 
