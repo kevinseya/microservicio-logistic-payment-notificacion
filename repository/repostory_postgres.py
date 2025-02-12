@@ -3,10 +3,10 @@ import logging
 from model.models import Payment
 from config.postgresql import get_postgres_connection_customer, get_postgres_connection_payments
 
-# Función para obtener payment
+# Function to get payment
 def get_pay_by_payment_intent(payment_intent):
     """
-    Encontrar el pago de acuerdo al payment_intent.
+    Find the payment according to the payment_intent.
     """
     connection = None
     try:
@@ -29,29 +29,29 @@ def get_pay_by_payment_intent(payment_intent):
                     status=result[4],
                     payment_intent_id=result[5]
                 )
-                logging.info(f"Pago encontrado: {payment.to_dict()}")
+                logging.info(f"Payment found: {payment.to_dict()}")
                 return payment
             else:
-                logging.warning(f"No se encontró ningún pago para el payment_intent {payment_intent}")
+                logging.warning(f"No payment found for payment_intent {payment_intent}")
                 return None
 
     except psycopg2.Error.connector.Error as e:
-        logging.error(f"Error al obtener el pago: {e}")
+        logging.error(f"Error getting payment: {e}")
         return None
     finally:
         if connection:
             connection.close()
 
-# Función para obtener la información del cliente basado en el customer_id
+# Function to get customer information based on customer_id
 def get_customer_by_id(customer_id):
     """
-    Obtiene la información del cliente basada en el customer_id.
+    Gets the customer information based on the customer_id.
     """
     connection = None
     try:
         connection = get_postgres_connection_customer()
         with connection.cursor() as cursor:
-            # Query para obtener toda la información del cliente basado en el customer_id
+            # Query to get all customer information based on customer_id
             select_query = """
                 SELECT id, name, lastname, email, phone, password, address, active
                 FROM customer
@@ -71,14 +71,14 @@ def get_customer_by_id(customer_id):
                     "address": result[6],
                     "active": result[7]
                 }
-                logging.info(f"Cliente encontrado: {customer}")
+                logging.info(f"Client Found: {customer}")
                 return customer
             else:
-                logging.warning(f"No se encontró ningún cliente para el customer_id {customer_id}")
+                logging.warning(f"No customer found for customer_id {customer_id}")
                 return None
 
     except psycopg2.Error as e:
-        logging.error(f"Error al obtener el cliente: {e}")
+        logging.error(f"Error getting client: {e}")
         return None
     finally:
         if connection:
@@ -86,14 +86,14 @@ def get_customer_by_id(customer_id):
 
 def update_payment_status_ok(payment_intent):
     """
-    Actualiza el estado de la orden en MySQL basado en el payment_intent.
+    Updates the order status in MySQL based on the payment_intent.
     """
     connection = None
     try:
         connection = get_postgres_connection_payments()
         cursor = connection.cursor()
 
-        # Ejecutar la actualización de estado en la base de datos
+        # Run the status update on the database
         update_query = """
             UPDATE payments
             SET status = %s
@@ -102,11 +102,11 @@ def update_payment_status_ok(payment_intent):
         cursor.execute(update_query, ("PROCESSED", payment_intent))
         connection.commit()
 
-        print(f"Estado de la orden actualizado a PROCESSED para el payment_intent {payment_intent}")
+        print(f"Order status updated to PROCESSED for payment_intent {payment_intent}")
         return True
 
     except psycopg2.Error.Error as e:
-        print(f"Error al actualizar el estado de la orden: {e}")
+        print(f"Error updating order status: {e}")
         return False
     finally:
         if connection:
