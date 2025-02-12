@@ -41,13 +41,9 @@ def get_order_by_id(order_id):
                 logging.warning(f"No order found for order_id{order_id}")
                 return None
 
-<<<<<<< HEAD
     except mysql.connector.Error as e:
         logging.error(f"Error al obtener la orden: {e}")
-=======
-    except mariadb.Error as e:
-        logging.error(f"Error getting order: {e}")
->>>>>>> ec1ed5a23e64cdc3ccdb3ce7fb2bf7c44b1eea1b
+
         return None
     finally:
         if connection:
