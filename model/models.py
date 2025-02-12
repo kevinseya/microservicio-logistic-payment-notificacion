@@ -32,7 +32,7 @@ class Payment(BaseModel):
 
     def to_dict(self):
         """
-        Convierte el modelo en un diccionario para fácil uso en la aplicación.
+        Converts the model into a dictionary for easy use in the application.
         """
         return {
             "id": str(self.id),
