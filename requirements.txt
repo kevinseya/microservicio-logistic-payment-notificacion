@@ -3,6 +3,6 @@ pydantic
 pymongo
 python-dotenv
 mysql-connector-python
-pyscopg2-binary
 Flask_mail
 requests
+psycopg2-binary
