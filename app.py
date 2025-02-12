@@ -39,7 +39,7 @@ def webhook():
     """
     try:
         if not request.is_json:
-            return jsonify({"error": "Se requiere contenido JSON"}), 400
+            return jsonify({"error": "JSON content is required"}), 400
 
         data = request.json
         
@@ -90,7 +90,7 @@ def webhook():
         
         email_sent = send_email(
     recipient=str(customer["email"]),
-    subject="Notificación de Pago de Orden",
+    subject="Order Payment Notification",
     body=f"""
     <html>
         <head>
@@ -143,17 +143,17 @@ def webhook():
         </head>
         <body>
             <div class="container">
-                <h1>🎉 ¡Pago Confirmado! 🎉</h1>
+                <h1>🎉 Payment Confirmed! 🎉</h1>
                 <p>Hola <strong class="highlight">{customer["name"]}</strong> <strong class="highlight">{customer["lastname"]}</strong>,</p>
                 <p>Hemos recibido tu pago exitosamente. Aquí tienes los detalles:</p>
                 
                 <div class="payment-box">
                     <p><strong>💳 ID de Pago:</strong> <span class="highlight">{notification_data["payment_id"]}</span></p>
-                    <p><strong>📅 Fecha:</strong> <span class="highlight">{notification_data["date"]}</span></p>
-                    <p><strong>🔗 Método:</strong> <span class="highlight">Stripe</span></p>
-                    <p><strong>💰 Monto:</strong> <span class="highlight">{notification_data["price"]}</span></p>
-                    <p><strong>📦 Orden:</strong> <span class="highlight">{notification_data["order_id"]}</span></p>
-                    <p><strong>📝 Detalles:</strong> <span class="highlight">{notification_data["packageDetails"]}</span></p>
+                    <p><strong>📅 Date:</strong> <span class="highlight">{notification_data["date"]}</span></p>
+                    <p><strong>🔗 Method:</strong> <span class="highlight">Stripe</span></p>
+                    <p><strong>💰 Amount:</strong> <span class="highlight">{notification_data["price"]}</span></p>
+                    <p><strong>📦 Order:</strong> <span class="highlight">{notification_data["order_id"]}</span></p>
+                    <p><strong>📝 Details:</strong> <span class="highlight">{notification_data["packageDetails"]}</span></p>
                 </div>
 
                 <p class="footer">Gracias por tu compra. ¡Esperamos verte pronto! 😊</p>
@@ -174,7 +174,7 @@ def webhook():
         return jsonify(response), 201
             
     except ValueError as e:
-        return jsonify({"error": f"Error de validación: {str(e)}"}), 400
+        return jsonify({"error": f"Validation error: {str(e)}"}), 400
     except Exception as e:
         return jsonify({"error": f"Server Error: {str(e)}"}), 500
 

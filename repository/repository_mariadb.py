@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO)
 
 def get_order_by_id(order_id):
     """
-    Obtiene la información de la orden basada en el order_id.
+    Gets the order information based on the order_id.
     """
     connection = None
     try:
@@ -35,14 +35,19 @@ def get_order_by_id(order_id):
                     "price": result[8],
                     "status": result[9]
                 }
-                logging.info(f"Orden encontrada: {order}")
+                logging.info(f"Order found: {order}")
                 return order
             else:
-                logging.warning(f"No se encontró ninguna orden para el order_id {order_id}")
+                logging.warning(f"No order found for order_id{order_id}")
                 return None
 
+<<<<<<< HEAD
     except mysql.connector.Error as e:
         logging.error(f"Error al obtener la orden: {e}")
+=======
+    except mariadb.Error as e:
+        logging.error(f"Error getting order: {e}")
+>>>>>>> ec1ed5a23e64cdc3ccdb3ce7fb2bf7c44b1eea1b
         return None
     finally:
         if connection:

@@ -13,7 +13,7 @@ def get_postgres_connection_customer():
         print("Conexión exitosa a PostgreSQL")
         return connection
     except psycopg2.Error as e:
-        print(f"Error de conexión a PostgreSQL: {e}")
+        print(f"Error connecting to PostgreSQL: {e}")
         raise
 
 def get_postgres_connection_payments():
@@ -25,9 +25,9 @@ def get_postgres_connection_payments():
             password=os.getenv("POSTGRES_PASSWORD_PAYMENTS"),
             database=os.getenv("POSTGRES_DB_PAYMENTS")
         )
-        print("Conexión exitosa a PostgreSQL")
+        print("Successful connection to PostgreSQL")
         return connection
     except psycopg2.Error as e:
-        print(f"Error de conexión a PostgreSQL: {e}")
+        print(f"Error connecting to PostgreSQL: {e}")
         raise
 
