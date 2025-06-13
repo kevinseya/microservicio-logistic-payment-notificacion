@@ -1,0 +1,8 @@
+﻿Flask
+pydantic
+pymongo
+python-dotenv
+mysql-connector-python
+Flask_mail
+requests
+psycopg2-binary
